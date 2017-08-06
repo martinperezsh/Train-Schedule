@@ -13,31 +13,53 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 
+// On click get value of form
 $('.btn').on('click', function(event) {
 	event.preventDefault();
 	
 	var trainName = $('#trainName').val().trim();
 	var destination = $('#destination').val().trim();
-	var firstTrain = $('#firstTrain').val().trim();
+	var firstTrain = moment($('#firstTrain').val().trim(), "HH:mm").subtract(10,"years").format("X");
 	var frequency = $('#frequency').val().trim();
 	
 	var newTrain = {
 		name: trainName,
 		destination: destination,
-		first: firstTrain,
+		firstTrain: firstTrain,
 		time: frequency
 	};
-	
+
+// Push data to database
 	database.ref().push(newTrain);
 	
-	console.log(newTrain.name);
-	console.log(newTrain.destination);
-	console.log(newTrain.first);
-	console.log(newTrain.time);
+	// console.log(newTrain.name);
+	// console.log(newTrain.destination);
+	// console.log(newTrain.firstTrain);
+	// console.log(newTrain.time);
 	
-	// database.ref().get(newTrain);
-	
-	$('#scheduleTable > tbody ').append('<tr><td>' + newTrain.name + '</td><td>' + newTrain.destination + '</td><td>' + newTrain.time + '</td><td>' + 'Next Arrival placeholder' + '</td><td>' + 'Minutes Away placeholder' + '</td></tr>');
+// Clears input fields
+	$('#trainName').val('');
+	$('#destination').val('');
+	$('#firstTrain').val('');
+	$('#frequency').val('');
 	
 	
 });
+
+database.ref().on('child_added', function(snapshot) {
+	var train = snapshot.val().name;
+	var destination = snapshot.val().destination;
+	var frequency = snapshot.val().frequency;
+	var firstTrain = snapshot.val().firstTrain;
+	var nextStop = moment().diff(moment.unix(firstTrain), "minutes")%frequency;
+	var minutes = frequency - nextStop;
+	var arrival = moment().add(minutes, "m").format("HH:mm A");
+
+	console.log(nextStop);
+	console.log(minutes);
+	console.log(arrival);
+
+
+	$('#scheduleTable > tbody ').append('<tr><td>' + train + '</td><td>' + destination + '</td><td>' + frequency + '</td><td>' + arrival + '</td><td>' + minutes + '</td></tr>');
+
+})
