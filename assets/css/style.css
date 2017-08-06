@@ -1,0 +1,39 @@
+body {
+	background-color; blue;
+	background-image: url(../images/bgimg.jpg);
+	background-size:1800px 2500px;
+	background-repeat:no-repeat;
+	
+}
+h1 {
+	text-align:center;
+}
+h2 {
+	text-align: center;
+}
+th {
+	text-align: center;
+}
+tbody {
+	text-align:center;
+}
+#addTrainPanel {
+	background-image: url(../images/port.png);
+		background-size:cover;
+}
+.form-control {
+	opacity:0.5;
+}
+.jumbotron {
+	background-image: url(../images/port2.jpg);
+	background-repeat:no-repeat;
+	background-size:100% 100%;
+}
+#tableArea {
+	background-image: url(../images/bgimg.jpg);
+	background-repeat:no-repeat;
+	background-size:cover;
+}
+.panel-heading {
+	
+}
