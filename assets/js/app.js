@@ -19,8 +19,9 @@ $('.btn').on('click', function(event) {
 	
 	var trainName = $('#trainName').val().trim();
 	var destination = $('#destination').val().trim();
-	var firstTrain = moment($('#firstTrain').val().trim(), "HH:mm").subtract(10,"years").format("X");
+	var firstTrain = moment($('#firstTrain').val().trim(), "hh:mm").subtract(1,"years").format("X");
 	var frequency = $('#frequency').val().trim();
+	console.log(firstTrain);
 	
 	var newTrain = {
 		name: trainName,
@@ -43,17 +44,17 @@ $('.btn').on('click', function(event) {
 	$('#firstTrain').val('');
 	$('#frequency').val('');
 	
-	
+	return false;
 });
 
 database.ref().on('child_added', function(snapshot) {
 	var train = snapshot.val().name;
 	var destination = snapshot.val().destination;
-	var frequency = snapshot.val().frequency;
+	var frequency = snapshot.val().time;
 	var firstTrain = snapshot.val().firstTrain;
 	var nextStop = moment().diff(moment.unix(firstTrain), "minutes")%frequency;
 	var minutes = frequency - nextStop;
-	var arrival = moment().add(minutes, "m").format("HH:mm A");
+	var arrival = moment().add(minutes, "m").format("hh:mm A");
 
 	console.log(nextStop);
 	console.log(minutes);
